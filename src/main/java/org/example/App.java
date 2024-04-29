@@ -7,6 +7,7 @@ import org.example.dao.IVehicleRepository;
 import org.example.dao.hibernate.UserDAO;
 import org.example.dao.hibernate.VehicleDAO;
 import org.example.model.Car;
+import org.example.model.Motorcycle;
 import org.example.model.User;
 import org.example.model.Vehicle;
 
@@ -17,9 +18,9 @@ public class App {
     private final Scanner scanner = new Scanner(System.in);
     private final IUserRepository iur = UserDAO.getInstance(HibernateUtil.getSessionFactory());
 
-    //TODO: Make VehicleDAO class a singleton.
-    private final IVehicleRepository ivr = new VehicleDAO(HibernateUtil.getSessionFactory());
 
+    //private final IVehicleRepository ivr = new VehicleDAO(HibernateUtil.getSessionFactory());
+    private final IVehicleRepository ivr = VehicleDAO.getInstance(HibernateUtil.getSessionFactory());
     public void run() {
 
         System.out.println("LOG IN");
@@ -62,14 +63,20 @@ public class App {
                 case "1":
                     System.out.println("Rent car by plates:");
                     String plate = scanner.nextLine();
-                    ivr.rentVehicle(plate,user.getLogin());
+                    boolean result = ivr.rentVehicle(plate,user.getLogin());
                     user = iur.getUser(user.getLogin());
+                    if (result){System.out.println("Pomyslnie wynajeto");}
+                    else {System.out.println("Nie udalo sie wynajac cos poszlo nie tak!!!");}
                     break;
                 case "2":
                     System.out.println("function for return car");
 
-                    String plateForReturn = user.getVehicle().getPlate();
-                    ivr.returnVehicle(plateForReturn,user.getLogin());
+                    try {
+                        String plateForReturn = user.getVehicle().getPlate();
+                        ivr.returnVehicle(plateForReturn,user.getLogin());
+                    }catch (RuntimeException e){
+                        System.out.println("Ten user nie ma wyporzyczonego samochodu!!!");
+                    }
                     user = iur.getUser(user.getLogin());
                     break;
                 case "3":
@@ -91,7 +98,13 @@ public class App {
                                         Integer.parseInt(arr[2]),
                                         Double.parseDouble(arr[3]),
                                         arr[4]));
-                    }
+                    }else if(line.equals("Motrocycle")) {
+                    ivr.addVehicle(new Motorcycle(arr[0],
+                            arr[1],
+                            Integer.parseInt(arr[2]),
+                            Double.parseDouble(arr[3]),
+                            arr[4], arr[5]));
+                }else{System.out.println("Zle wybrane: Car/Motrocycle");}
                     break;
 
                 case "7":
@@ -99,7 +112,25 @@ public class App {
                     String  removePlate = scanner.nextLine();
                     ivr.removeVehicle(removePlate);
                     break;
-                    //TODO: add logic for user add.
+
+
+                case "8":
+                    System.out.println("add user (only) separator is ; String login, String password");
+                    line = scanner.nextLine();
+                    //arr = line.split(";");
+                    String[] arr2 = line.split(";");
+                    User user1 = new User(arr2[0], arr2[1]);
+                    if (iur.getUser(arr2[0]) == null){
+                        iur.addUser(user1);
+                        //iur.addUser(new User(arr2[0], arr2[1]));
+                    }
+                    else {
+                        System.out.println("Proba dodania usera ktory juz istnieje");
+
+                    }
+                    break;
+// add  test test1234   ///   test;tester1234
+                //kazik;kazik1234
                 case "9":
                     System.out.println("remove user by login:");
                     String  removeLogin = scanner.nextLine();

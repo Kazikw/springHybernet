@@ -42,7 +42,7 @@ ALTER TABLE tvehicle
     ADD COLUMN vehicle_type VARCHAR(255)
 
 UPDATE tvehicle
-SET vehicle_type = 'MOTORCYCLE'
+SET vehicle_type = 'MOTORCYCLE'v
 WHERE category IN ('A', 'A1','A2', 'AM');
 UPDATE tvehicle
 SET vehicle_type = 'CAR'

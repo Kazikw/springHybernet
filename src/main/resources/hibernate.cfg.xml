@@ -7,9 +7,14 @@
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 
+        <!--
         <property name="connection.url">jdbc:postgresql://manny.db.elephantsql.com/***</property>
         <property name="connection.username">***</property>
         <property name="connection.password">***</property>
+-->
+        <property name="connection.url">jdbc:postgresql://rogue.db.elephantsql.com/tjdwuefy</property>
+        <property name="connection.username">tjdwuefy</property>
+        <property name="connection.password">vEBZt2Cpb8IoFZsi_TxITgaa1WTuz4bZ</property>
 
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">validate</property>
@@ -18,9 +23,9 @@
 
         <mapping class="org.example.model.Vehicle"/>
         <mapping class="org.example.model.Car"/>
-        <!--
-        TODO: add mapping classes User and Motorcycle
-        -->
+
+        <mapping class="org.example.model.User"/>
+        <mapping class="org.example.model.Motorcycle"/>
 
     </session-factory>
 </hibernate-configuration>

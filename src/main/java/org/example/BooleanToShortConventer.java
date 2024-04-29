@@ -16,7 +16,8 @@ public class BooleanToShortConventer implements AttributeConverter<Boolean, Shor
     @Override
     public Boolean convertToEntityAttribute(Short value) {
 
-        //TODO: make logic for this function
-        return false;
+
+        //return false;
+        return (value != null && value == 1);
     }
 }

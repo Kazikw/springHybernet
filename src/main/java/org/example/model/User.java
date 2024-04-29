@@ -12,7 +12,8 @@ public class User {
     private Role role;
 
     //private String rentedPlate;
-    //TODO:add OneToOne relation (class Vehicle)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rentedplate", referencedColumnName = "plate")
     private Vehicle vehicle;
 
     public User(String login, String password, Role role, Vehicle vehicle) {

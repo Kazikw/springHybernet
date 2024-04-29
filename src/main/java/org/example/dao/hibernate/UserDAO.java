@@ -1,5 +1,6 @@
 package org.example.dao.hibernate;
 
+import org.example.authenticate.Authenticator;
 import org.example.dao.IUserRepository;
 import org.example.model.User;
 import org.hibernate.Session;
@@ -13,10 +14,18 @@ public class UserDAO implements IUserRepository {
     @Override
     public User getUser(String login) {
         Session session = sessionFactory.openSession();
-        User user = null;
         Transaction transaction = null;
-        //TODO: Finish this method
-        return user;
+        try {
+            transaction = session.beginTransaction();
+            User user = session.get(User.class, login);
+            transaction.commit();
+            return user;
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            return null;
+        } finally {
+            session.close();
+        }
     }
 
     @Override
@@ -25,6 +34,7 @@ public class UserDAO implements IUserRepository {
             Transaction transaction = null;
             try {
                 transaction = session.beginTransaction();
+                user.setPassword(Authenticator.hashPassword(user.getPassword()));// test
                 session.persist(user);
                 transaction.commit();
             } catch (RuntimeException e) {
